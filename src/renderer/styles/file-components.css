@@ -1,0 +1,243 @@
+/*
+ * ファイル関連コンポーネントスタイルシート
+ * ファイル選択、最近使用したファイルなどのコンポーネントのスタイルを定義
+ */
+
+/* ファイル選択部分のスタイル */
+.file-selector {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.file-selector h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.file-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.select-file-button {
+  background-color: #4a86e8;
+  color: white;
+  font-size: 1rem;
+  padding: 8px 16px;
+  align-self: flex-start;
+}
+
+.select-file-button:hover {
+  background-color: #3a76d8;
+}
+
+.selected-file {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* 右上に固定されたファイル選択ボタン */
+.file-select-button-fixed {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  z-index: 50;
+}
+
+.select-file-icon {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.5); /* 透明度を高く */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2px); /* ブラー効果を追加 */
+}
+
+.select-file-icon:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  transform: scale(1.1);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.select-file-icon svg {
+  color: #4a86e8;
+}
+
+/* ファイル選択ボタンのアイコンを濃い色に */
+.select-file-icon svg {
+  color: #2c3e50; /* サイドバーと同じ色にして視認性向上 */
+  stroke-width: 2px; /* アイコンを少し太く */
+}
+
+/* RecentFiles スタイル */
+.recent-files {
+  padding: 20px;
+}
+
+.recent-files-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.recent-files-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.recent-file-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative; /* 削除ボタンの位置決めのため */
+}
+
+.recent-file-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.recent-file-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  filter: brightness(0.7);
+}
+
+.recent-file-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0; /* これが必要な場合がある - flexアイテムの収縮を確実にする */
+  margin-right: 30px; /* 削除ボタン用のスペース */
+}
+
+/* 削除ボタンのスタイル */
+.delete-button {
+  padding: 5px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  transition: all 0.2s;
+}
+
+.delete-button:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.delete-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0.7);
+  opacity: 0.7;
+}
+
+.delete-button:hover .delete-icon {
+  opacity: 1;
+}
+
+.recent-file-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recent-file-path {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.no-recent-files {
+  padding: 20px;
+  text-align: center;
+  color: #888;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+}
+
+/* 検索ボックスのスタイル */
+.search-box {
+  margin-bottom: 20px;
+}
+
+.search-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  filter: brightness(0.7);
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+}
+
+.search-input::placeholder {
+  color: #aaa;
+}
+
+.search-clear-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+}
+
+.search-clear-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #555;
+}

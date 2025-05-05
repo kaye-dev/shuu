@@ -1,0 +1,318 @@
+/*
+ * エディタスタイルシート
+ * テキストエディタとMarkdownプレビューのスタイルを定義
+ */
+
+/* エディタ関連のスタイル */
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100% - 36px); /* タブバーの高さを引く */
+  background-color: white;
+  border-radius: 0 0 8px 8px; /* 上部の角は丸めない */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.editor-header {
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.editor-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.editor-filepath {
+  font-size: 0.75rem;
+  color: #888;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 400px;
+}
+
+.editor-filepath.modified {
+  color: #f39c12; /* 未保存状態の時はファイルパスの色を変更 */
+}
+
+.modified-indicator {
+  font-size: 0.75rem;
+  color: #f39c12;
+  margin-left: 3px;
+}
+
+.editor-filename {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.editor-filename.editable {
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.editor-filename.editable:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.editor-filename-input {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+  padding: 3px 6px;
+  border: 1px solid #4a86e8;
+  border-radius: 3px;
+  outline: none;
+  background-color: white;
+  min-width: 200px;
+}
+
+.editor-stats {
+  font-size: 0.8rem;
+  color: #777;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+}
+
+.editor-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+.line-numbers {
+  background-color: #f5f5f5;
+  padding: 15px 8px 0 15px;
+  color: #858585;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: right;
+  border-right: 1px solid #e0e0e0;
+  user-select: none;
+  overflow-y: auto; /* スクロールを許可するが */
+  overflow-x: hidden;
+  box-sizing: border-box;
+  -ms-overflow-style: none;  /* IE, Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/* Chromeとその他Webkitブラウザ向けにスクロールバーを非表示 */
+.line-numbers::-webkit-scrollbar {
+  display: none;
+}
+
+.line-number {
+  padding-right: 5px;
+}
+
+.editor-textarea {
+  flex: 1;
+  padding: 15px 15px 0 15px;
+  border: none;
+  resize: none;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  outline: none;
+  overflow-y: auto;
+  white-space: pre;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* スクロール同期のためのスタイル */
+.editor-textarea::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.editor-textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.editor-textarea::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.editor-textarea::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Markdown プレビュー関連のスタイル */
+.markdown-preview-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.markdown-preview-header {
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.markdown-preview-title {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.markdown-preview-close {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.markdown-preview-close:hover {
+  background-color: #d32f2f;
+}
+
+.markdown-preview-content {
+  flex: 1;
+  padding: 20px 20px 0 20px;
+  overflow-y: auto;
+  line-height: 1.6;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Markdown コンテンツのスタイル */
+.markdown-preview-content h1 {
+  font-size: 2em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+.markdown-preview-content h2 {
+  font-size: 1.5em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+.markdown-preview-content h3 {
+  font-size: 1.25em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.markdown-preview-content p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-preview-content code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(27, 31, 35, 0.05);
+  border-radius: 3px;
+}
+
+.markdown-preview-content pre {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f6f8fa;
+  border-radius: 3px;
+}
+
+.markdown-preview-content pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.markdown-preview-content blockquote {
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+  margin: 0 0 16px 0;
+}
+
+.markdown-preview-content ul,
+.markdown-preview-content ol {
+  padding-left: 2em;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-preview-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.markdown-preview-content table th,
+.markdown-preview-content table td {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}
+
+.markdown-preview-content table tr {
+  background-color: #fff;
+  border-top: 1px solid #c6cbd1;
+}
+
+.markdown-preview-content table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+.markdown-preview-content img {
+  max-width: 100%;
+  box-sizing: content-box;
+}
+
+/* キーボードショートカットのヒント表示 */
+.keyboard-shortcut-hint {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+  z-index: 100;
+}
+
+.keyboard-shortcut-hint:hover {
+  opacity: 1;
+}

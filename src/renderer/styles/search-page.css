@@ -1,0 +1,116 @@
+/*
+ * 検索ページのスタイル
+ */
+
+.search-page {
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.search-input-container {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 3px rgba(52, 152, 219, 0.3);
+}
+
+.search-loading {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #7f8c8d;
+}
+
+.search-results {
+  margin-top: 10px;
+}
+
+.search-result-file {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.search-result-file-header {
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-result-file-name {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.search-result-file-path {
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+.search-location {
+  color: #7f8c8d;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.search-result-matches {
+  background-color: #fff;
+}
+
+.search-result-match {
+  padding: 5px 15px;
+  display: flex;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-result-match:last-child {
+  border-bottom: none;
+}
+
+.search-result-match:hover {
+  background-color: #f1f1f1;
+}
+
+.search-result-line-number {
+  padding-right: 10px;
+  color: #7f8c8d;
+  user-select: none;
+  min-width: 40px;
+  text-align: right;
+}
+
+.search-result-line {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  font-family: monospace;
+  flex: 1;
+}
+
+.search-match-highlight {
+  background-color: rgba(255, 255, 0, 0.3);
+  font-weight: bold;
+}

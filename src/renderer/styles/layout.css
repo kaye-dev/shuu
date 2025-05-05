@@ -1,0 +1,99 @@
+/*
+ * レイアウトスタイルシート
+ * アプリケーションのメインレイアウト構造を定義
+ */
+
+/* アプリケーション全体のコンテナ */
+.app-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/* メインコンテンツエリア */
+.slide-app {
+  margin-left: 60px; /* サイドバーの幅と同じ */
+  width: calc(100% - 60px);
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden; /* スクロールを無効化してエディタ内でのみスクロールを発生させる */
+  height: calc(100vh - 60px); /* ヘッダーの高さを引く */
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+/* サイドバーが折りたたまれた時のコンテンツエリア */
+.slide-app.sidebar-collapsed {
+  margin-left: 0; /* サイドバーが折りたたまれた場合 */
+  width: 100%;
+}
+
+/* メインコンテンツコンテナ - DirectoryExplorerとスライドアプリを横に並べる */
+.main-content-container {
+  display: flex;
+  width: calc(100% - 60px); /* サイドバーの幅を引く */
+  margin-left: 60px;
+  margin-top: 60px; /* ヘッダーの高さ */
+  height: calc(100vh - 60px); /* ヘッダーの高さを引く */
+  transition: margin-left 0.3s ease, width 0.3s ease;
+  overflow: hidden;
+}
+
+/* サイドバーが非表示の場合のメインコンテンツコンテナ */
+.main-content-container.no-sidebar {
+  width: 100%;
+  margin-left: 0;
+}
+
+/* サイドバーが折りたたまれた場合のメインコンテンツコンテナ */
+.main-content-container.sidebar-collapsed {
+  width: 100%;
+  margin-left: 0;
+}
+
+/* ヘッダーが非表示の場合のメインコンテンツコンテナ */
+.main-content-container.no-header {
+  margin-top: 0;
+  height: 100vh;
+}
+
+/* フォルダエクスプローラーが表示されている場合のスライドアプリ */
+.slide-app.with-explorer {
+  margin-left: 0;
+  width: calc(100% - 250px); /* ディレクトリエクスプローラーの幅を引く */
+}
+
+/* サイドバーが非表示の場合のスライドアプリ */
+.slide-app.no-sidebar {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* ヘッダーが非表示の場合のスライドアプリ */
+.slide-app.no-header {
+  margin-top: 0;
+  height: 100vh;
+}
+
+/* コンテンツスプリットビュー */
+.content-split-view {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* エディタのフルスクリーンコンテナ - 隙間なく広げるためのスタイル */
+.editor-fullscreen-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* コンテナ自体のオーバーフローを隠す */
+  position: relative; /* 子要素の配置の基準点とする */
+}

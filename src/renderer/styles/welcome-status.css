@@ -1,0 +1,181 @@
+/*
+ * ウェルカム画面・状態表示スタイルシート
+ * 初期画面やローディング、エラー表示などのスタイルを定義
+ */
+
+/* ウェルカム画面のスタイル */
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 40px);
+  width: 100%;
+  text-align: center;
+}
+
+.welcome-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.welcome-select-file-button {
+  background-color: #4a86e8;
+  color: white;
+  font-size: 1.2rem;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.welcome-select-file-button:hover {
+  background-color: #3a76d8;
+  transform: scale(1.05);
+}
+
+/* 新規ファイル作成ボタン */
+.welcome-new-file-button {
+  background-color: #34a853;
+  color: white;
+  font-size: 1.2rem;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+
+.welcome-new-file-button:hover {
+  background-color: #2d9249;
+  transform: scale(1.05);
+}
+
+/* ウェルカム画面のスプリットビュー */
+.welcome-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.welcome-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.welcome-button {
+  display: flex;
+  align-items: center;
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  background-color: white;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+  width: 250px;
+}
+
+.welcome-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.welcome-button-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  filter: brightness(0.7);
+}
+
+.recent-files-container {
+  flex: 1;
+  overflow-y: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+  border-left: 1px solid #e0e0e0;
+}
+
+/* プロジェクト訴求メッセージのスタイル */
+.project-prompt-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+}
+
+.project-prompt {
+  text-align: center;
+  max-width: 500px;
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.project-prompt h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.project-prompt p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.project-prompt-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.project-prompt-button {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  background-color: #4a86e8;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.project-prompt-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 読み込み中・エラー表示 */
+.loading, .error {
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.loading {
+  background: #f0f8ff;
+  color: #0066cc;
+}
+
+.error {
+  background: #fff0f0;
+  color: #cc0000;
+}
+
+.slide-app h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}

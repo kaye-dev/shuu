@@ -1,0 +1,43 @@
+/*
+ * メインスタイルシート
+ * 各コンポーネント用のCSSファイルをインポートし、アプリケーション全体のスタイルを管理します
+ *
+ * このファイルでは各コンポーネントやエリア別にスタイルを分割し、
+ * より良い保守性と可読性を実現しています。
+ */
+
+/* 基本スタイル - 全体的な基本設定 */
+@import './styles/base.css';
+
+/* レイアウト - アプリケーションの構造とグリッドシステム */
+@import './styles/layout.css';
+
+/* サイドバー - ナビゲーション関連 */
+@import './styles/sidebar.css';
+
+/* ヘッダー - 上部固定要素 */
+@import './styles/header.css';
+
+/* PDFビューア - PDF表示と関連コントロール */
+@import './styles/pdf-viewer.css';
+
+/* エディタとMarkdownプレビュー - テキスト編集関連 */
+@import './styles/editor.css';
+
+/* ディレクトリエクスプローラー - ファイルシステム表示 */
+@import './styles/directory-explorer.css';
+
+/* ファイルコンポーネント - ファイル選択と最近のファイル */
+@import './styles/file-components.css';
+
+/* ウェルカム画面と状態表示 - 初期画面やローディング、エラー表示 */
+@import './styles/welcome-status.css';
+
+/* タブ - エディタタブのスタイル */
+@import './styles/tabs.css';
+
+/* ページ共通 - 各ページ共通のスタイル */
+@import './styles/page-common.css';
+
+/* 検索ページ - 検索機能のスタイル */
+@import './styles/search-page.css';

@@ -1,0 +1,89 @@
+/*
+ * ヘッダースタイルシート
+ * アプリケーションのヘッダー部分のスタイルを定義
+ */
+
+/* ヘッダー */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 60px; /* サイドバーの幅と同じ */
+  right: 0;
+  height: 60px;
+  background-color: #f0f0f0; /* グレー味を出す */
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 左右に分ける */
+  padding: 0 20px;
+  z-index: 50;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: left 0.3s ease;
+}
+
+/* サイドバー折りたたみ時のヘッダー */
+.app-header.sidebar-hidden {
+  left: 0;
+}
+
+/* ヘッダーの左右コンテンツ */
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+}
+
+/* ヘッダートグルアイコン */
+.header-toggle-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.header-toggle-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.header-toggle-icon img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+  filter: brightness(0.5); /* アイコンを暗めに調整して視認性向上 */
+}
+
+.header-toggle-icon img.rotated {
+  transform: rotate(180deg);
+}
+
+/* ヘッダーアイコンのスタイル */
+.header-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  margin-left: 10px;
+  transition: background-color 0.2s;
+}
+
+.header-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.header-icon-img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0.5);
+}
+
+/* ヘッダー右側のアイコングループ */
+.header-right {
+  display: flex;
+  align-items: center;
+}

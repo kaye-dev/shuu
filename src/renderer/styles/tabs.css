@@ -1,0 +1,125 @@
+/*
+ * タブスタイルシート
+ * VSCodeのようなタブインターフェースのスタイルを定義
+ */
+
+.tabs-container {
+  display: flex;
+  height: 36px;
+  background-color: #f5f5f5;
+  overflow-x: auto;
+  overflow-y: hidden;
+  user-select: none;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* スクロールバーのスタイル */
+.tabs-container::-webkit-scrollbar {
+  height: 3px;
+}
+
+.tabs-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tabs-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  min-width: 120px;
+  max-width: 180px;
+  height: 100%;
+  padding: 0 8px 0 12px;
+  background-color: #ececec;
+  border-right: 1px solid #e0e0e0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+.tab.active {
+  background-color: white;
+  border-bottom: 2px solid #007acc; /* VSCode blue color */
+}
+
+.tab:hover {
+  background-color: #e5e5e5;
+}
+
+.tab.active:hover {
+  background-color: white;
+}
+
+.tab-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.tab-icon {
+  margin-right: 6px;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+}
+
+.tab-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  color: #555;
+}
+
+.tab.active .tab-title {
+  color: #333;
+}
+
+.tab-modified {
+  display: inline-block;
+  margin-left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #f39c12;
+  flex-shrink: 0;
+}
+
+.tab-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-left: 4px;
+  border-radius: 4px;
+  opacity: 0.6;
+  transition: background-color 0.2s, opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.tab:hover .tab-close {
+  opacity: 0.8;
+}
+
+.tab-close:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  opacity: 1;
+}
+
+.tab-close img {
+  width: 14px;
+  height: 14px;
+}
+
+/* ファイル未保存時のスタイル */
+.tab.modified .tab-title {
+  font-style: italic;
+}
