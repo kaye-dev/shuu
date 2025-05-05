@@ -91,9 +91,7 @@ const createWindow = async () => {
     // FYI: https://www.electronjs.org/ja/docs/latest/api/frameless-window
     titleBarStyle: 'hidden',
     webPreferences: {
-      preload: app.isPackaged
-        ? path.join(__dirname, '../preload/index.js') // 本番環境用
-        : path.join(__dirname, '../../.electron-vite/dist/preload/index.js'), // 開発環境用パスを修正
+      preload: path.join(__dirname, '../preload/index.js'),
       nodeIntegration: false,
       contextIsolation: true,
       sandbox: true // Explicitly enable sandbox mode

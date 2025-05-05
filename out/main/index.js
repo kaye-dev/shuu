@@ -345,8 +345,7 @@ const createWindow = async () => {
     // FYI: https://www.electronjs.org/ja/docs/latest/api/frameless-window
     titleBarStyle: "hidden",
     webPreferences: {
-      preload: require$$0.app.isPackaged ? path.join(__dirname, "../preload/index.js") : path.join(__dirname, "../../.electron-vite/dist/preload/index.js"),
-      // 開発環境用パスを修正
+      preload: path.join(__dirname, "../preload/index.js"),
       nodeIntegration: false,
       contextIsolation: true,
       sandbox: true
