@@ -76,6 +76,11 @@ const SlideApp: React.FC = () => {
       setLoading(true);
       setError(null);
 
+      // window.electron が存在するか確認
+      if (!window.electron || !window.electron.selectFile) {
+        throw new Error('Electron API が読み込まれていません。アプリを再起動してください。');
+      }
+
       // Electronのネイティブダイアログを使用してファイルを選択
       const fileInfo = await window.electron.selectFile();
 
@@ -136,6 +141,11 @@ const SlideApp: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
+
+      // window.electron が存在するか確認
+      if (!window.electron || !window.electron.selectDirectory) {
+        throw new Error('Electron API が読み込まれていません。アプリを再起動してください。');
+      }
 
       // Electronのネイティブダイアログを使用してディレクトリを選択
       const dirInfo = await window.electron.selectDirectory();

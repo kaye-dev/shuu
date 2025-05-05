@@ -1,16 +1,13 @@
-import { c as commonjsGlobal, g as getDefaultExportFromCjs } from "./_commonjsHelpers-DWwsNxpa.js";
-import require$$0 from "electron";
-import fs from "fs";
-import path from "path";
-import require$$3 from "https";
-import require$$0$1 from "stream";
-import require$$2 from "events";
-import require$$0$2 from "buffer";
-import require$$1 from "util";
-import __cjs_mod__ from "node:module";
-const __filename = import.meta.filename;
-const __dirname = import.meta.dirname;
-const require2 = __cjs_mod__.createRequire(import.meta.url);
+"use strict";
+const _commonjsHelpers = require("./_commonjsHelpers-Bc2YnDe1.js");
+const require$$0 = require("electron");
+const fs = require("fs");
+const path = require("path");
+const require$$3 = require("https");
+const require$$0$1 = require("stream");
+const require$$2 = require("events");
+const require$$0$2 = require("buffer");
+const require$$1 = require("util");
 function _mergeNamespaces(n, m) {
   for (var i = 0; i < m.length; i++) {
     const e = m[i];
@@ -37,9 +34,9 @@ var hasRequiredUtils$1;
 function requireUtils$1() {
   if (hasRequiredUtils$1) return utils$1;
   hasRequiredUtils$1 = 1;
-  (function(exports) {
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.changePermissions = exports.downloadFile = exports.getPath = void 0;
+  (function(exports2) {
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.changePermissions = exports2.downloadFile = exports2.getPath = void 0;
     const electron_1 = require$$0;
     const fs$1 = fs;
     const path$1 = path;
@@ -48,14 +45,14 @@ function requireUtils$1() {
       const savePath = electron_1.app.getPath("userData");
       return path$1.resolve(`${savePath}/extensions`);
     };
-    exports.getPath = getPath;
+    exports2.getPath = getPath;
     const request = electron_1.net ? electron_1.net.request : https.get;
     const downloadFile = (from, to) => {
       return new Promise((resolve, reject) => {
         const req = request(from);
         req.on("response", (res) => {
           if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-            return (0, exports.downloadFile)(res.headers.location, to).then(resolve).catch(reject);
+            return (0, exports2.downloadFile)(res.headers.location, to).then(resolve).catch(reject);
           }
           res.pipe(fs$1.createWriteStream(to)).on("close", resolve);
           res.on("error", reject);
@@ -64,18 +61,18 @@ function requireUtils$1() {
         req.end();
       });
     };
-    exports.downloadFile = downloadFile;
+    exports2.downloadFile = downloadFile;
     const changePermissions = (dir, mode) => {
       const files = fs$1.readdirSync(dir);
       files.forEach((file) => {
         const filePath = path$1.join(dir, file);
         fs$1.chmodSync(filePath, parseInt(`${mode}`, 8));
         if (fs$1.statSync(filePath).isDirectory()) {
-          (0, exports.changePermissions)(filePath, mode);
+          (0, exports2.changePermissions)(filePath, mode);
         }
       });
     };
-    exports.changePermissions = changePermissions;
+    exports2.changePermissions = changePermissions;
   })(utils$1);
   return utils$1;
 }
@@ -152,7 +149,7 @@ var hasRequiredSafeBuffer;
 function requireSafeBuffer() {
   if (hasRequiredSafeBuffer) return safeBuffer.exports;
   hasRequiredSafeBuffer = 1;
-  (function(module, exports) {
+  (function(module2, exports2) {
     var buffer = require$$0$2;
     var Buffer2 = buffer.Buffer;
     function copyProps(src, dst) {
@@ -161,10 +158,10 @@ function requireSafeBuffer() {
       }
     }
     if (Buffer2.from && Buffer2.alloc && Buffer2.allocUnsafe && Buffer2.allocUnsafeSlow) {
-      module.exports = buffer;
+      module2.exports = buffer;
     } else {
-      copyProps(buffer, exports);
-      exports.Buffer = SafeBuffer;
+      copyProps(buffer, exports2);
+      exports2.Buffer = SafeBuffer;
     }
     function SafeBuffer(arg, encodingOrOffset, length) {
       return Buffer2(arg, encodingOrOffset, length);
@@ -317,7 +314,7 @@ function requireInherits() {
   if (hasRequiredInherits) return inherits.exports;
   hasRequiredInherits = 1;
   try {
-    var util2 = require2("util");
+    var util2 = require("util");
     if (typeof util2.inherits !== "function") throw "";
     inherits.exports = util2.inherits;
   } catch (e) {
@@ -330,7 +327,7 @@ var hasRequiredBufferList;
 function requireBufferList() {
   if (hasRequiredBufferList) return BufferList.exports;
   hasRequiredBufferList = 1;
-  (function(module) {
+  (function(module2) {
     function _classCallCheck(instance, Constructor) {
       if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -341,7 +338,7 @@ function requireBufferList() {
     function copyBuffer(src, target, offset) {
       src.copy(target, offset);
     }
-    module.exports = function() {
+    module2.exports = function() {
       function BufferList2() {
         _classCallCheck(this, BufferList2);
         this.head = null;
@@ -397,7 +394,7 @@ function requireBufferList() {
       return BufferList2;
     }();
     if (util2 && util2.inspect && util2.inspect.custom) {
-      module.exports.prototype[util2.inspect.custom] = function() {
+      module2.exports.prototype[util2.inspect.custom] = function() {
         var obj = util2.inspect({ length: this.length });
         return this.constructor.name + " " + obj;
       };
@@ -507,7 +504,7 @@ function require_stream_writable() {
   };
   var Stream = requireStream();
   var Buffer2 = requireSafeBuffer().Buffer;
-  var OurUint8Array = (typeof commonjsGlobal !== "undefined" ? commonjsGlobal : typeof window !== "undefined" ? window : typeof self !== "undefined" ? self : {}).Uint8Array || function() {
+  var OurUint8Array = (typeof _commonjsHelpers.commonjsGlobal !== "undefined" ? _commonjsHelpers.commonjsGlobal : typeof window !== "undefined" ? window : typeof self !== "undefined" ? self : {}).Uint8Array || function() {
   };
   function _uint8ArrayToBuffer(chunk) {
     return Buffer2.from(chunk);
@@ -1250,7 +1247,7 @@ function require_stream_readable() {
   };
   var Stream = requireStream();
   var Buffer2 = requireSafeBuffer().Buffer;
-  var OurUint8Array = (typeof commonjsGlobal !== "undefined" ? commonjsGlobal : typeof window !== "undefined" ? window : typeof self !== "undefined" ? self : {}).Uint8Array || function() {
+  var OurUint8Array = (typeof _commonjsHelpers.commonjsGlobal !== "undefined" ? _commonjsHelpers.commonjsGlobal : typeof window !== "undefined" ? window : typeof self !== "undefined" ? self : {}).Uint8Array || function() {
   };
   function _uint8ArrayToBuffer(chunk) {
     return Buffer2.from(chunk);
@@ -2043,25 +2040,25 @@ var hasRequiredReadable;
 function requireReadable() {
   if (hasRequiredReadable) return readable.exports;
   hasRequiredReadable = 1;
-  (function(module, exports) {
+  (function(module2, exports2) {
     var Stream = require$$0$1;
     if (process.env.READABLE_STREAM === "disable" && Stream) {
-      module.exports = Stream;
-      exports = module.exports = Stream.Readable;
-      exports.Readable = Stream.Readable;
-      exports.Writable = Stream.Writable;
-      exports.Duplex = Stream.Duplex;
-      exports.Transform = Stream.Transform;
-      exports.PassThrough = Stream.PassThrough;
-      exports.Stream = Stream;
+      module2.exports = Stream;
+      exports2 = module2.exports = Stream.Readable;
+      exports2.Readable = Stream.Readable;
+      exports2.Writable = Stream.Writable;
+      exports2.Duplex = Stream.Duplex;
+      exports2.Transform = Stream.Transform;
+      exports2.PassThrough = Stream.PassThrough;
+      exports2.Stream = Stream;
     } else {
-      exports = module.exports = require_stream_readable();
-      exports.Stream = Stream || exports;
-      exports.Readable = exports;
-      exports.Writable = require_stream_writable();
-      exports.Duplex = require_stream_duplex();
-      exports.Transform = require_stream_transform();
-      exports.PassThrough = require_stream_passthrough();
+      exports2 = module2.exports = require_stream_readable();
+      exports2.Stream = Stream || exports2;
+      exports2.Readable = exports2;
+      exports2.Writable = require_stream_writable();
+      exports2.Duplex = require_stream_duplex();
+      exports2.Transform = require_stream_transform();
+      exports2.PassThrough = require_stream_passthrough();
     }
   })(readable, readable.exports);
   return readable.exports;
@@ -2240,35 +2237,35 @@ var hasRequiredLib$2;
 function requireLib$2() {
   if (hasRequiredLib$2) return lib$2;
   hasRequiredLib$2 = 1;
-  var Mutation = commonjsGlobal.MutationObserver || commonjsGlobal.WebKitMutationObserver;
+  var Mutation = _commonjsHelpers.commonjsGlobal.MutationObserver || _commonjsHelpers.commonjsGlobal.WebKitMutationObserver;
   var scheduleDrain;
   if (process.browser) {
     if (Mutation) {
       var called = 0;
       var observer = new Mutation(nextTick);
-      var element = commonjsGlobal.document.createTextNode("");
+      var element = _commonjsHelpers.commonjsGlobal.document.createTextNode("");
       observer.observe(element, {
         characterData: true
       });
       scheduleDrain = function() {
         element.data = called = ++called % 2;
       };
-    } else if (!commonjsGlobal.setImmediate && typeof commonjsGlobal.MessageChannel !== "undefined") {
-      var channel = new commonjsGlobal.MessageChannel();
+    } else if (!_commonjsHelpers.commonjsGlobal.setImmediate && typeof _commonjsHelpers.commonjsGlobal.MessageChannel !== "undefined") {
+      var channel = new _commonjsHelpers.commonjsGlobal.MessageChannel();
       channel.port1.onmessage = nextTick;
       scheduleDrain = function() {
         channel.port2.postMessage(0);
       };
-    } else if ("document" in commonjsGlobal && "onreadystatechange" in commonjsGlobal.document.createElement("script")) {
+    } else if ("document" in _commonjsHelpers.commonjsGlobal && "onreadystatechange" in _commonjsHelpers.commonjsGlobal.document.createElement("script")) {
       scheduleDrain = function() {
-        var scriptEl = commonjsGlobal.document.createElement("script");
+        var scriptEl = _commonjsHelpers.commonjsGlobal.document.createElement("script");
         scriptEl.onreadystatechange = function() {
           nextTick();
           scriptEl.onreadystatechange = null;
           scriptEl.parentNode.removeChild(scriptEl);
           scriptEl = null;
         };
-        commonjsGlobal.document.documentElement.appendChild(scriptEl);
+        _commonjsHelpers.commonjsGlobal.document.documentElement.appendChild(scriptEl);
       };
     } else {
       scheduleDrain = function() {
@@ -2735,14 +2732,14 @@ function requireSetImmediate() {
     }
     attachTo.setImmediate = setImmediate2;
     attachTo.clearImmediate = clearImmediate;
-  })(typeof self === "undefined" ? typeof commonjsGlobal === "undefined" ? setImmediate$1 : commonjsGlobal : self);
+  })(typeof self === "undefined" ? typeof _commonjsHelpers.commonjsGlobal === "undefined" ? setImmediate$1 : _commonjsHelpers.commonjsGlobal : self);
   return setImmediate$1;
 }
 var hasRequiredUtils;
 function requireUtils() {
   if (hasRequiredUtils) return utils;
   hasRequiredUtils = 1;
-  (function(exports) {
+  (function(exports2) {
     var support2 = requireSupport();
     var base642 = requireBase64();
     var nodejsUtils2 = requireNodejsUtils();
@@ -2757,8 +2754,8 @@ function requireUtils() {
       }
       return stringToArrayLike(str, result);
     }
-    exports.newBlob = function(part, type) {
-      exports.checkSupport("blob");
+    exports2.newBlob = function(part, type) {
+      exports2.checkSupport("blob");
       try {
         return new Blob([part], {
           type
@@ -2846,7 +2843,7 @@ function requireUtils() {
       }
     };
     function arrayLikeToString(array) {
-      var chunk = 65536, type = exports.getTypeOf(array), canUseApply = true;
+      var chunk = 65536, type = exports2.getTypeOf(array), canUseApply = true;
       if (type === "uint8array") {
         canUseApply = arrayToStringHelper.applyCanBeUsed.uint8array;
       } else if (type === "nodebuffer") {
@@ -2863,7 +2860,7 @@ function requireUtils() {
       }
       return arrayToStringHelper.stringifyByChar(array);
     }
-    exports.applyFromCharCode = arrayLikeToString;
+    exports2.applyFromCharCode = arrayLikeToString;
     function arrayLikeToArrayLike(arrayFrom, arrayTo) {
       for (var i = 0; i < arrayFrom.length; i++) {
         arrayTo[i] = arrayFrom[i];
@@ -2940,19 +2937,19 @@ function requireUtils() {
       },
       "nodebuffer": identity
     };
-    exports.transformTo = function(outputType, input) {
+    exports2.transformTo = function(outputType, input) {
       if (!input) {
         input = "";
       }
       if (!outputType) {
         return input;
       }
-      exports.checkSupport(outputType);
-      var inputType = exports.getTypeOf(input);
+      exports2.checkSupport(outputType);
+      var inputType = exports2.getTypeOf(input);
       var result = transform[inputType][outputType](input);
       return result;
     };
-    exports.resolve = function(path2) {
+    exports2.resolve = function(path2) {
       var parts = path2.split("/");
       var result = [];
       for (var index2 = 0; index2 < parts.length; index2++) {
@@ -2967,7 +2964,7 @@ function requireUtils() {
       }
       return result.join("/");
     };
-    exports.getTypeOf = function(input) {
+    exports2.getTypeOf = function(input) {
       if (typeof input === "string") {
         return "string";
       }
@@ -2984,15 +2981,15 @@ function requireUtils() {
         return "arraybuffer";
       }
     };
-    exports.checkSupport = function(type) {
+    exports2.checkSupport = function(type) {
       var supported = support2[type.toLowerCase()];
       if (!supported) {
         throw new Error(type + " is not supported by this platform");
       }
     };
-    exports.MAX_VALUE_16BITS = 65535;
-    exports.MAX_VALUE_32BITS = -1;
-    exports.pretty = function(str) {
+    exports2.MAX_VALUE_16BITS = 65535;
+    exports2.MAX_VALUE_32BITS = -1;
+    exports2.pretty = function(str) {
       var res = "", code, i;
       for (i = 0; i < (str || "").length; i++) {
         code = str.charCodeAt(i);
@@ -3000,18 +2997,18 @@ function requireUtils() {
       }
       return res;
     };
-    exports.delay = function(callback, args, self2) {
+    exports2.delay = function(callback, args, self2) {
       setImmediate(function() {
         callback.apply(self2 || null, args || []);
       });
     };
-    exports.inherits = function(ctor, superCtor) {
+    exports2.inherits = function(ctor, superCtor) {
       var Obj = function() {
       };
       Obj.prototype = superCtor.prototype;
       ctor.prototype = new Obj();
     };
-    exports.extend = function() {
+    exports2.extend = function() {
       var result = {}, i, attr;
       for (i = 0; i < arguments.length; i++) {
         for (attr in arguments[i]) {
@@ -3022,7 +3019,7 @@ function requireUtils() {
       }
       return result;
     };
-    exports.prepareContent = function(name, inputData, isBinary, isOptimizedBinaryString, isBase64) {
+    exports2.prepareContent = function(name, inputData, isBinary, isOptimizedBinaryString, isBase64) {
       var promise = external2.Promise.resolve(inputData).then(function(data) {
         var isBlob = support2.blob && (data instanceof Blob || ["[object File]", "[object Blob]"].indexOf(Object.prototype.toString.call(data)) !== -1);
         if (isBlob && typeof FileReader !== "undefined") {
@@ -3041,14 +3038,14 @@ function requireUtils() {
         }
       });
       return promise.then(function(data) {
-        var dataType = exports.getTypeOf(data);
+        var dataType = exports2.getTypeOf(data);
         if (!dataType) {
           return external2.Promise.reject(
             new Error("Can't read the data of '" + name + "'. Is it in a supported JavaScript type (String, Blob, ArrayBuffer, etc) ?")
           );
         }
         if (dataType === "arraybuffer") {
-          data = exports.transformTo("uint8array", data);
+          data = exports2.transformTo("uint8array", data);
         } else if (dataType === "string") {
           if (isBase64) {
             data = base642.decode(data);
@@ -3295,7 +3292,7 @@ var hasRequiredUtf8;
 function requireUtf8() {
   if (hasRequiredUtf8) return utf8;
   hasRequiredUtf8 = 1;
-  (function(exports) {
+  (function(exports2) {
     var utils2 = requireUtils();
     var support2 = requireSupport();
     var nodejsUtils2 = requireNodejsUtils();
@@ -3410,13 +3407,13 @@ function requireUtf8() {
       }
       return utils2.applyFromCharCode(utf16buf);
     };
-    exports.utf8encode = function utf8encode(str) {
+    exports2.utf8encode = function utf8encode(str) {
       if (support2.nodebuffer) {
         return nodejsUtils2.newBufferFrom(str, "utf-8");
       }
       return string2buf(str);
     };
-    exports.utf8decode = function utf8decode(buf) {
+    exports2.utf8decode = function utf8decode(buf) {
       if (support2.nodebuffer) {
         return utils2.transformTo("nodebuffer", buf).toString("utf-8");
       }
@@ -3453,31 +3450,31 @@ function requireUtf8() {
         }
       }
       this.push({
-        data: exports.utf8decode(usableData),
+        data: exports2.utf8decode(usableData),
         meta: chunk.meta
       });
     };
     Utf8DecodeWorker.prototype.flush = function() {
       if (this.leftOver && this.leftOver.length) {
         this.push({
-          data: exports.utf8decode(this.leftOver),
+          data: exports2.utf8decode(this.leftOver),
           meta: {}
         });
         this.leftOver = null;
       }
     };
-    exports.Utf8DecodeWorker = Utf8DecodeWorker;
+    exports2.Utf8DecodeWorker = Utf8DecodeWorker;
     function Utf8EncodeWorker() {
       GenericWorker.call(this, "utf-8 encode");
     }
     utils2.inherits(Utf8EncodeWorker, GenericWorker);
     Utf8EncodeWorker.prototype.processChunk = function(chunk) {
       this.push({
-        data: exports.utf8encode(chunk.data),
+        data: exports2.utf8encode(chunk.data),
         meta: chunk.meta
       });
     };
-    exports.Utf8EncodeWorker = Utf8EncodeWorker;
+    exports2.Utf8EncodeWorker = Utf8EncodeWorker;
   })(utf8);
   return utf8;
 }
@@ -4057,12 +4054,12 @@ var hasRequiredCommon;
 function requireCommon() {
   if (hasRequiredCommon) return common;
   hasRequiredCommon = 1;
-  (function(exports) {
+  (function(exports2) {
     var TYPED_OK = typeof Uint8Array !== "undefined" && typeof Uint16Array !== "undefined" && typeof Int32Array !== "undefined";
     function _has(obj, key) {
       return Object.prototype.hasOwnProperty.call(obj, key);
     }
-    exports.assign = function(obj) {
+    exports2.assign = function(obj) {
       var sources = Array.prototype.slice.call(arguments, 1);
       while (sources.length) {
         var source = sources.shift();
@@ -4080,7 +4077,7 @@ function requireCommon() {
       }
       return obj;
     };
-    exports.shrinkBuf = function(buf, size) {
+    exports2.shrinkBuf = function(buf, size) {
       if (buf.length === size) {
         return buf;
       }
@@ -4128,20 +4125,20 @@ function requireCommon() {
         return [].concat.apply([], chunks);
       }
     };
-    exports.setTyped = function(on) {
+    exports2.setTyped = function(on) {
       if (on) {
-        exports.Buf8 = Uint8Array;
-        exports.Buf16 = Uint16Array;
-        exports.Buf32 = Int32Array;
-        exports.assign(exports, fnTyped);
+        exports2.Buf8 = Uint8Array;
+        exports2.Buf16 = Uint16Array;
+        exports2.Buf32 = Int32Array;
+        exports2.assign(exports2, fnTyped);
       } else {
-        exports.Buf8 = Array;
-        exports.Buf16 = Array;
-        exports.Buf32 = Array;
-        exports.assign(exports, fnUntyped);
+        exports2.Buf8 = Array;
+        exports2.Buf16 = Array;
+        exports2.Buf32 = Array;
+        exports2.assign(exports2, fnUntyped);
       }
     };
-    exports.setTyped(TYPED_OK);
+    exports2.setTyped(TYPED_OK);
   })(common);
   return common;
 }
@@ -9906,7 +9903,7 @@ function requireYaku() {
   if (hasRequiredYaku) return yaku.exports;
   hasRequiredYaku = 1;
   (function() {
-    var $undefined, $null = null, root = typeof window === "object" ? window : commonjsGlobal, isLongStackTrace = false, process2 = root.process, Arr = Array, Err = Error, $rejected = 0, $resolved = 1, $pending = 2, $Symbol = "Symbol", $iterator = "iterator", $species = "species", $speciesKey = $Symbol + "(" + $species + ")", $return = "return", $unhandled = "_uh", $promiseTrace = "_pt", $settlerTrace = "_st", $invalidThis = "Invalid this", $invalidArgument = "Invalid argument", $fromPrevious = "\nFrom previous ", $promiseCircularChain = "Chaining cycle detected for promise", $unhandledRejectionMsg = "Uncaught (in promise)", $rejectionHandled = "rejectionHandled", $unhandledRejection = "unhandledRejection", $tryCatchFn, $tryCatchThis, $tryErr = { e: $null }, $noop = function() {
+    var $undefined, $null = null, root = typeof window === "object" ? window : _commonjsHelpers.commonjsGlobal, isLongStackTrace = false, process2 = root.process, Arr = Array, Err = Error, $rejected = 0, $resolved = 1, $pending = 2, $Symbol = "Symbol", $iterator = "iterator", $species = "species", $speciesKey = $Symbol + "(" + $species + ")", $return = "return", $unhandled = "_uh", $promiseTrace = "_pt", $settlerTrace = "_st", $invalidThis = "Invalid this", $invalidArgument = "Invalid argument", $fromPrevious = "\nFrom previous ", $promiseCircularChain = "Chaining cycle detected for promise", $unhandledRejectionMsg = "Uncaught (in promise)", $rejectionHandled = "rejectionHandled", $unhandledRejection = "unhandledRejection", $tryCatchFn, $tryCatchThis, $tryErr = { e: $null }, $noop = function() {
     }, $cleanStackReg = /^.+\/node_modules\/yaku\/.+\n?/mg;
     var Yaku = yaku.exports = function Promise2(executor) {
       var self2 = this, err;
@@ -10434,9 +10431,9 @@ var hasRequiredDownloadChromeExtension;
 function requireDownloadChromeExtension() {
   if (hasRequiredDownloadChromeExtension) return downloadChromeExtension;
   hasRequiredDownloadChromeExtension = 1;
-  (function(exports) {
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.downloadChromeExtension = void 0;
+  (function(exports2) {
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.downloadChromeExtension = void 0;
     const fs$1 = fs;
     const path$1 = path;
     const utils_1 = requireUtils$1();
@@ -10472,7 +10469,7 @@ function requireDownloadChromeExtension() {
             throw err;
           }
           await new Promise((resolve) => setTimeout(resolve, 200));
-          return await (0, exports.downloadChromeExtension)(chromeStoreID, {
+          return await (0, exports2.downloadChromeExtension)(chromeStoreID, {
             forceDownload,
             attempts: attempts - 1
           });
@@ -10480,7 +10477,7 @@ function requireDownloadChromeExtension() {
       }
       return extensionFolder;
     };
-    exports.downloadChromeExtension = downloadChromeExtension2;
+    exports2.downloadChromeExtension = downloadChromeExtension2;
   })(downloadChromeExtension);
   return downloadChromeExtension;
 }
@@ -10563,11 +10560,9 @@ function requireDist() {
   return dist$1;
 }
 var distExports = requireDist();
-const index = /* @__PURE__ */ getDefaultExportFromCjs(distExports);
+const index = /* @__PURE__ */ _commonjsHelpers.getDefaultExportFromCjs(distExports);
 const index$1 = /* @__PURE__ */ _mergeNamespaces({
   __proto__: null,
   default: index
 }, [distExports]);
-export {
-  index$1 as i
-};
+exports.index = index$1;

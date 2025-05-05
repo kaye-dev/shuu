@@ -1,16 +1,35 @@
-import { Menu, shell, app, ipcMain, dialog, BrowserWindow } from "electron";
-import path from "path";
-import fs from "fs";
-import { promisify } from "util";
-import { exec } from "child_process";
-import electronUpdater from "electron-updater";
-import electronLog from "electron-log";
-import { URL } from "url";
-import electronSquirrelStartup from "electron-squirrel-startup";
-import __cjs_mod__ from "node:module";
-const __filename = import.meta.filename;
-const __dirname = import.meta.dirname;
-const require2 = __cjs_mod__.createRequire(import.meta.url);
+"use strict";
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+const require$$0 = require("electron");
+const path = require("path");
+const fs = require("fs");
+const require$$1 = require("util");
+const child_process = require("child_process");
+const pkg = require("electron-updater");
+const electronLog = require("electron-log");
+const url = require("url");
+const electronSquirrelStartup = require("electron-squirrel-startup");
 class MenuBuilder {
   mainWindow;
   constructor(mainWindow2) {
@@ -21,14 +40,14 @@ class MenuBuilder {
       this.setupDevelopmentEnvironment();
     }
     const template = process.platform === "darwin" ? this.buildDarwinTemplate() : this.buildDefaultTemplate();
-    const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
+    const menu = require$$0.Menu.buildFromTemplate(template);
+    require$$0.Menu.setApplicationMenu(menu);
     return menu;
   }
   setupDevelopmentEnvironment() {
     this.mainWindow.webContents.on("context-menu", (_, props) => {
       const { x, y } = props;
-      Menu.buildFromTemplate([
+      require$$0.Menu.buildFromTemplate([
         {
           label: "Inspect element",
           click: () => {
@@ -65,7 +84,7 @@ class MenuBuilder {
           label: "Quit",
           accelerator: "Command+Q",
           click: () => {
-            app.quit();
+            require$$0.app.quit();
           }
         }
       ]
@@ -143,13 +162,13 @@ class MenuBuilder {
         {
           label: "Learn More",
           click() {
-            shell.openExternal("https://electronjs.org");
+            require$$0.shell.openExternal("https://electronjs.org");
           }
         },
         {
           label: "Documentation",
           click() {
-            shell.openExternal(
+            require$$0.shell.openExternal(
               "https://github.com/electron/electron/tree/main/docs#readme"
             );
           }
@@ -157,13 +176,13 @@ class MenuBuilder {
         {
           label: "Community Discussions",
           click() {
-            shell.openExternal("https://www.electronjs.org/community");
+            require$$0.shell.openExternal("https://www.electronjs.org/community");
           }
         },
         {
           label: "Search Issues",
           click() {
-            shell.openExternal("https://github.com/electron/electron/issues");
+            require$$0.shell.openExternal("https://github.com/electron/electron/issues");
           }
         }
       ]
@@ -233,13 +252,13 @@ class MenuBuilder {
           {
             label: "Learn More",
             click() {
-              shell.openExternal("https://electronjs.org");
+              require$$0.shell.openExternal("https://electronjs.org");
             }
           },
           {
             label: "Documentation",
             click() {
-              shell.openExternal(
+              require$$0.shell.openExternal(
                 "https://github.com/electron/electron/tree/main/docs#readme"
               );
             }
@@ -247,13 +266,13 @@ class MenuBuilder {
           {
             label: "Community Discussions",
             click() {
-              shell.openExternal("https://www.electronjs.org/community");
+              require$$0.shell.openExternal("https://www.electronjs.org/community");
             }
           },
           {
             label: "Search Issues",
             click() {
-              shell.openExternal("https://github.com/electron/electron/issues");
+              require$$0.shell.openExternal("https://github.com/electron/electron/issues");
             }
           }
         ]
@@ -265,13 +284,13 @@ class MenuBuilder {
 function resolveHtmlPath(htmlFileName) {
   if (process.env.NODE_ENV === "development") {
     const port = process.env.ELECTRON_RENDERER_PORT || 5173;
-    const url = new URL(`http://localhost:${port}`);
-    url.pathname = htmlFileName;
-    return url.href;
+    const url$1 = new url.URL(`http://localhost:${port}`);
+    url$1.pathname = htmlFileName;
+    return url$1.href;
   }
-  return `file://${path.resolve(app.getAppPath(), "dist/renderer/index.html")}`;
+  return `file://${path.resolve(require$$0.app.getAppPath(), "dist/renderer/index.html")}`;
 }
-const { autoUpdater } = electronUpdater;
+const { autoUpdater } = pkg;
 const log = electronLog;
 class AppUpdater {
   constructor() {
@@ -281,27 +300,31 @@ class AppUpdater {
   }
 }
 let mainWindow = null;
-ipcMain.on("ipc-example", async (event, arg) => {
+require$$0.ipcMain.on("ipc-example", async (event, arg) => {
   const msgTemplate = (pingPong) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply("ipc-example", msgTemplate("pong"));
 });
 if (process.env.NODE_ENV === "production") {
-  import("./source-map-support-Y74iNDS0.js").then((n) => n.s).then(({ default: sourceMapSupport }) => {
+  Promise.resolve().then(() => require("./source-map-support-sa1QsFNm.js")).then((n) => n.sourceMapSupport).then((sourceMapSupport) => {
     sourceMapSupport.install();
+  }).catch((err) => {
+    console.error("Source map support initialization failed:", err);
   });
 }
 const isDebug = process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true";
 if (isDebug) {
-  import("electron-debug").then(({ default: electronDebug }) => {
-    electronDebug();
+  import("electron-debug").then((electronDebug) => {
+    electronDebug.default();
+  }).catch((err) => {
+    console.error("Electron debug initialization failed:", err);
   });
 }
 const installExtensions = async () => {
   try {
-    const { default: installExtension, REACT_DEVELOPER_TOOLS } = await import("./index-Bvwf_vkq.js").then((n) => n.i);
-    await installExtension(REACT_DEVELOPER_TOOLS);
-    console.log("React Devtoolsをインストールしました");
+    const { default: installExtension, REACT_DEVELOPER_TOOLS } = await Promise.resolve().then(() => require("./index-BF3lRjns.js")).then((n) => n.index);
+    const name = await installExtension(REACT_DEVELOPER_TOOLS);
+    console.log(`${name}をインストールしました`);
   } catch (err) {
     console.log("開発者拡張機能のインストールに失敗しました:", err);
   }
@@ -310,17 +333,25 @@ const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
   }
-  const RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, "assets") : path.join(__dirname, "../../assets");
+  const RESOURCES_PATH = require$$0.app.isPackaged ? path.join(process.resourcesPath, "assets") : path.join(__dirname, "../../assets");
   const getAssetPath = (...paths) => {
     return path.join(RESOURCES_PATH, ...paths);
   };
-  mainWindow = new BrowserWindow({
+  mainWindow = new require$$0.BrowserWindow({
     show: false,
     width: 1024,
     height: 728,
     icon: getAssetPath("icon.png"),
     // FYI: https://www.electronjs.org/ja/docs/latest/api/frameless-window
-    titleBarStyle: "hidden"
+    titleBarStyle: "hidden",
+    webPreferences: {
+      preload: require$$0.app.isPackaged ? path.join(__dirname, "../preload/index.js") : path.join(__dirname, "../../.electron-vite/dist/preload/index.js"),
+      // 開発環境用パスを修正
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true
+      // Explicitly enable sandbox mode
+    }
   });
   mainWindow.loadURL(resolveHtmlPath("index.html"));
   mainWindow.on("ready-to-show", () => {
@@ -340,22 +371,22 @@ const createWindow = async () => {
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
   mainWindow.webContents.setWindowOpenHandler((edata) => {
-    shell.openExternal(edata.url);
+    require$$0.shell.openExternal(edata.url);
     return { action: "deny" };
   });
   new AppUpdater();
 };
-app.on("window-all-closed", () => {
+require$$0.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
-    app.quit();
+    require$$0.app.quit();
   }
 });
-ipcMain.handle("select-directory", async () => {
+require$$0.ipcMain.handle("select-directory", async () => {
   try {
     if (!mainWindow) {
       throw new Error("メインウィンドウが存在しません");
     }
-    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    const { canceled, filePaths } = await require$$0.dialog.showOpenDialog(mainWindow, {
       properties: ["openDirectory"]
     });
     if (canceled || filePaths.length === 0) {
@@ -371,7 +402,7 @@ ipcMain.handle("select-directory", async () => {
     throw error;
   }
 });
-ipcMain.handle("open-directory", async (_, dirPath) => {
+require$$0.ipcMain.handle("open-directory", async (_, dirPath) => {
   try {
     if (!fs.existsSync(dirPath)) {
       throw new Error(`ディレクトリが存在しません: ${dirPath}`);
@@ -382,7 +413,7 @@ ipcMain.handle("open-directory", async (_, dirPath) => {
     throw error;
   }
 });
-ipcMain.handle("get-directory-contents", async (_, dirPath) => {
+require$$0.ipcMain.handle("get-directory-contents", async (_, dirPath) => {
   try {
     if (!fs.existsSync(dirPath)) {
       throw new Error(`ディレクトリが存在しません: ${dirPath}`);
@@ -424,12 +455,12 @@ function getDirectoryContents(directoryPath) {
     return [];
   }
 }
-ipcMain.handle("select-file", async () => {
+require$$0.ipcMain.handle("select-file", async () => {
   try {
     if (!mainWindow) {
       throw new Error("メインウィンドウが存在しません");
     }
-    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    const { canceled, filePaths } = await require$$0.dialog.showOpenDialog(mainWindow, {
       filters: [
         { name: "テキストファイル", extensions: ["txt", "md"] },
         { name: "All Files", extensions: ["*"] }
@@ -451,7 +482,7 @@ ipcMain.handle("select-file", async () => {
     throw error;
   }
 });
-ipcMain.handle("open-file", async (_, filePath) => {
+require$$0.ipcMain.handle("open-file", async (_, filePath) => {
   try {
     if (!fs.existsSync(filePath)) {
       throw new Error(`ファイルが存在しません: ${filePath}`);
@@ -464,7 +495,7 @@ ipcMain.handle("open-file", async (_, filePath) => {
     throw error;
   }
 });
-ipcMain.handle("save-file", async (_, options) => {
+require$$0.ipcMain.handle("save-file", async (_, options) => {
   try {
     const { defaultPath, content, overwrite = false } = options;
     if (!mainWindow) {
@@ -472,7 +503,7 @@ ipcMain.handle("save-file", async (_, options) => {
     }
     let filePath = defaultPath;
     if (!overwrite || !fs.existsSync(defaultPath)) {
-      const { canceled, filePath: selectedPath } = await dialog.showSaveDialog(mainWindow, {
+      const { canceled, filePath: selectedPath } = await require$$0.dialog.showSaveDialog(mainWindow, {
         defaultPath,
         filters: [
           { name: "Markdown", extensions: ["md"] },
@@ -494,15 +525,15 @@ ipcMain.handle("save-file", async (_, options) => {
     throw error;
   }
 });
-ipcMain.handle("search-in-files", async (_, searchTerm, directoryPath) => {
+require$$0.ipcMain.handle("search-in-files", async (_, searchTerm, directoryPath) => {
   try {
     if (!mainWindow) {
       throw new Error("メインウィンドウが存在しません");
     }
     let searchDir = directoryPath;
     if (!searchDir) {
-      const homeDir = app.getPath("home");
-      const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+      const homeDir = require$$0.app.getPath("home");
+      const { canceled, filePaths } = await require$$0.dialog.showOpenDialog(mainWindow, {
         properties: ["openDirectory"],
         defaultPath: homeDir,
         title: "検索対象のディレクトリを選択"
@@ -553,7 +584,7 @@ ipcMain.handle("search-in-files", async (_, searchTerm, directoryPath) => {
 });
 async function getAllFiles(dirPath, patterns) {
   try {
-    const execAsync = promisify(exec);
+    const execAsync = require$$1.promisify(child_process.exec);
     let command;
     if (process.platform === "win32") {
       const patternString = patterns.map((p) => `"${p}"`).join(",");
@@ -569,7 +600,7 @@ async function getAllFiles(dirPath, patterns) {
     return [];
   }
 }
-ipcMain.handle("create-file-system-item", async (_, options) => {
+require$$0.ipcMain.handle("create-file-system-item", async (_, options) => {
   try {
     const { parentPath, name, type } = options;
     if (!fs.existsSync(parentPath)) {
@@ -590,7 +621,7 @@ ipcMain.handle("create-file-system-item", async (_, options) => {
     throw error;
   }
 });
-ipcMain.handle("delete-file-system-item", async (_, options) => {
+require$$0.ipcMain.handle("delete-file-system-item", async (_, options) => {
   try {
     const { path: itemPath, type } = options;
     if (!fs.existsSync(itemPath)) {
@@ -607,12 +638,12 @@ ipcMain.handle("delete-file-system-item", async (_, options) => {
     throw error;
   }
 });
-app.whenReady().then(() => {
+require$$0.app.whenReady().then(() => {
   createWindow();
-  app.on("activate", () => {
+  require$$0.app.on("activate", () => {
     if (mainWindow === null) createWindow();
   });
 }).catch(console.log);
 if (electronSquirrelStartup) {
-  app.quit();
+  require$$0.app.quit();
 }

@@ -11,7 +11,12 @@ export default defineConfig({
   },
   preload: {
     build: {
-      outDir: 'out/preload'
+      outDir: '.electron-vite/dist/preload',
+      rollupOptions: {
+        output: {
+          entryFileNames: '[name].js'
+        }
+      }
     },
     plugins: [externalizeDepsPlugin()]
   },

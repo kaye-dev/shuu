@@ -8,13 +8,13 @@ import fs from 'fs';
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { promisify } from 'util';
 import { exec } from 'child_process';
-import electronUpdater from 'electron-updater';
+// Use the default import directly to avoid potential issues with CommonJS/ESM interop
+import pkg from 'electron-updater';
+const { autoUpdater } = pkg;
 import electronLog from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-// CommonJSモジュールからのデフォルトエクスポートを取得
-const { autoUpdater } = electronUpdater;
 const log = electronLog;
 
 class AppUpdater {
@@ -35,30 +35,36 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 // Source map support for production
 if (process.env.NODE_ENV === 'production') {
-  // ESModule形式でのインポート
-  import('source-map-support').then(({ default: sourceMapSupport }) => {
-    sourceMapSupport.install();
-  });
+  import('source-map-support')
+    .then((sourceMapSupport) => {
+      sourceMapSupport.install();
+    })
+    .catch(err => {
+      console.error('Source map support initialization failed:', err);
+    });
 }
 
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDebug) {
-  // ESModule形式でのインポート
-  import('electron-debug').then(({ default: electronDebug }) => {
-    electronDebug();
-  });
+  import('electron-debug')
+    .then((electronDebug) => {
+      electronDebug.default();
+    })
+    .catch(err => {
+      console.error('Electron debug initialization failed:', err);
+    });
 }
 
 const installExtensions = async () => {
   try {
-    // 開発ツール拡張機能をインポート
-    const { default: installExtension, REACT_DEVELOPER_TOOLS } = await import('electron-devtools-installer');
+    const { default: installExtension, REACT_DEVELOPER_TOOLS } =
+      await import('electron-devtools-installer');
 
-    // 拡張機能をインストール
-    await installExtension(REACT_DEVELOPER_TOOLS);
-    console.log('React Devtoolsをインストールしました');
+    // Install React DevTools
+    const name = await installExtension(REACT_DEVELOPER_TOOLS);
+    console.log(`${name}をインストールしました`);
   } catch (err) {
     console.log('開発者拡張機能のインストールに失敗しました:', err);
   }
@@ -84,6 +90,14 @@ const createWindow = async () => {
     icon: getAssetPath('icon.png'),
     // FYI: https://www.electronjs.org/ja/docs/latest/api/frameless-window
     titleBarStyle: 'hidden',
+    webPreferences: {
+      preload: app.isPackaged
+        ? path.join(__dirname, '../preload/index.js') // 本番環境用
+        : path.join(__dirname, '../../.electron-vite/dist/preload/index.js'), // 開発環境用パスを修正
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true // Explicitly enable sandbox mode
+    }
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
@@ -509,6 +523,7 @@ ipcMain.handle('delete-file-system-item', async (_, options: { path: string; typ
   }
 });
 
+// アプリケーションの起動処理
 app
   .whenReady()
   .then(() => {

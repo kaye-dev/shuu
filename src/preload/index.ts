@@ -19,6 +19,7 @@ export interface DeleteFileSystemItemOptions {
   type: 'file' | 'directory';
 }
 
+// Define the handler object
 const electronHandler = {
   ipcRenderer: {
     sendMessage(channel: Channels, ...args: unknown[]) {
@@ -57,6 +58,8 @@ const electronHandler = {
   deleteFileSystemItem: (options: DeleteFileSystemItemOptions) => ipcRenderer.invoke('delete-file-system-item', options),
 };
 
+// Expose the API to the renderer process
 contextBridge.exposeInMainWorld('electron', electronHandler);
 
+// For TypeScript users, allow importing the type
 export type ElectronHandler = typeof electronHandler;

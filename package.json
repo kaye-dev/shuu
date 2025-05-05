@@ -2,7 +2,6 @@
   "name": "shuu",
   "version": "0.0.1",
   "main": "./out/main/index.js",
-  "type": "module",
   "scripts": {
     "format": "prettier --write .",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
