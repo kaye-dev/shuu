@@ -11,17 +11,37 @@ files:
   - out/preload
   - out/renderer
   - package.json
+  - '!**/.vscode/*'
+  - '!src/renderer/src/assets/directory-agents'
+
+# rendererフォルダをResourcesディレクトリに明示的に配置する
+extraFiles:
+  - from: "out/renderer"
+    to: "renderer"
+    filter: "**/*"
+
+asarUnpack:
+  - "assets/**"
+
+extraResources:
+  - from: './assets'
+    to: 'assets'
 
 mac:
   target:
+    # Apple Silicon（arm64）を優先
     - target: default
       arch:
-        - arm64
-        - x64
+        - "arm64"  # Apple Siliconを優先
   type: distribution
   hardenedRuntime: true
   entitlements: assets/entitlements.mac.plist
   entitlementsInherit: assets/entitlements.mac.plist
+  extendInfo:
+    - NSCameraUsageDescription: アプリケーションがカメラへのアクセスを要求しています。
+    - NSMicrophoneUsageDescription: アプリケーションがマイクへのアクセスを要求しています。
+    - NSDocumentsFolderUsageDescription: アプリケーションがドキュメントフォルダへのアクセスを要求しています。
+    - NSDownloadsFolderUsageDescription: アプリケーションがダウンロードフォルダへのアクセスを要求しています。
   gatekeeperAssess: false
   notarize: false
   icon: assets/icon.icns
@@ -45,8 +65,7 @@ dmg:
       type: link
       path: /Applications
 
-extraResources:
-  - './assets/**'
+npmRebuild: false
 
 publish:
   provider: github
