@@ -22,12 +22,12 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 const require$$0 = require("electron");
+const electronLog = require("electron-log");
 const path = require("path");
 const fs = require("fs");
 const require$$1 = require("util");
 const child_process = require("child_process");
 const pkg = require("electron-updater");
-const electronLog = require("electron-log");
 const url = require("url");
 const electronSquirrelStartup = require("electron-squirrel-startup");
 class MenuBuilder {
@@ -281,6 +281,7 @@ class MenuBuilder {
     return templateDefault;
   }
 }
+const log$2 = electronLog;
 function resolveHtmlPath(htmlFileName) {
   if (process.env.NODE_ENV === "development") {
     const port = process.env.ELECTRON_RENDERER_PORT || 5173;
@@ -288,17 +289,55 @@ function resolveHtmlPath(htmlFileName) {
     url$1.pathname = htmlFileName;
     return url$1.href;
   }
-  return `file://${path.resolve(require$$0.app.getAppPath(), "dist/renderer/index.html")}`;
+  const appPath = require$$0.app.getAppPath();
+  log$2.info(`アプリパス: ${appPath}`);
+  const possibleRendererPaths = [
+    // パターン1: electron-builder.ymlのextraFilesで指定した標準的な場所
+    path.join(path.dirname(appPath), "renderer"),
+    // パターン2: Resources直下
+    path.join(process.resourcesPath, "renderer"),
+    // パターン3: app.asar内部
+    path.join(appPath, "out", "renderer"),
+    // パターン4: Resources/app内（asarなし構成）
+    path.join(process.resourcesPath, "app", "out", "renderer"),
+    // パターン5: アプリのディレクトリ構造によっては、さらに上のディレクトリに配置される場合
+    path.join(path.dirname(path.dirname(appPath)), "renderer")
+  ];
+  for (const rendererPath2 of possibleRendererPaths) {
+    const fullPath = path.join(rendererPath2, htmlFileName);
+    try {
+      const exists = fs.existsSync(fullPath);
+      log$2.info(`renderer検索: ${fullPath} - 存在: ${exists}`);
+      if (exists) {
+        log$2.info(`renderer検出成功: ${fullPath}`);
+        return `file://${fullPath}`;
+      }
+    } catch (error) {
+      log$2.warn(`パス確認エラー (無視して継続): ${fullPath}`);
+    }
+  }
+  const resourcesPath = path.dirname(appPath);
+  const rendererPath = path.join(resourcesPath, "renderer");
+  log$2.info(`レンダラーのデフォルトパス: ${rendererPath}`);
+  return `file://${path.join(rendererPath, htmlFileName)}`;
 }
 const { autoUpdater } = pkg;
-const log = electronLog;
+const log$1 = electronLog;
+log$1.transports.file.level = "info";
+log$1.transports.console.level = "debug";
+console.log("ログファイルの場所: ", log$1.transports.file.getFile().path);
 class AppUpdater {
   constructor() {
-    log.transports.file.level = "info";
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.logger = log$1;
+    autoUpdater.forceDevUpdateConfig = true;
+    try {
+      autoUpdater.checkForUpdatesAndNotify();
+    } catch (error) {
+      log$1.error("自動更新チェック中にエラーが発生しました:", error);
+    }
   }
 }
+log$1.info("アプリケーション起動: " + (/* @__PURE__ */ new Date()).toLocaleString());
 let mainWindow = null;
 require$$0.ipcMain.on("ipc-example", async (event, arg) => {
   const msgTemplate = (pingPong) => `IPC test: ${pingPong}`;
@@ -330,50 +369,206 @@ const installExtensions = async () => {
   }
 };
 const createWindow = async () => {
-  if (isDebug) {
-    await installExtensions();
+  try {
+    if (isDebug) {
+      await installExtensions();
+    }
+    let RESOURCES_PATH = "";
+    try {
+      RESOURCES_PATH = require$$0.app.isPackaged ? path.join(process.resourcesPath, "assets") : path.join(__dirname, "../../assets");
+      if (!fs.existsSync(RESOURCES_PATH)) {
+        log$1.warn(`リソースパスが存在しません: ${RESOURCES_PATH}`);
+        log$1.info("代替リソースパスを使用します");
+        RESOURCES_PATH = require$$0.app.isPackaged ? path.join(process.resourcesPath, "app", "assets") : path.join(__dirname, "../../assets");
+        if (!fs.existsSync(RESOURCES_PATH)) {
+          log$1.warn(`代替リソースパスも存在しません: ${RESOURCES_PATH}`);
+        } else {
+          log$1.info(`代替リソースパス: ${RESOURCES_PATH}`);
+        }
+      }
+    } catch (error) {
+      log$1.error("リソースパスの設定中にエラーが発生しました:", error);
+    }
+    const getAssetPath = (...paths) => {
+      return path.join(RESOURCES_PATH, ...paths);
+    };
+    mainWindow = new require$$0.BrowserWindow({
+      show: false,
+      width: 1024,
+      height: 728,
+      icon: getAssetPath("icon.png"),
+      // FYI: https://www.electronjs.org/ja/docs/latest/api/frameless-window
+      titleBarStyle: "hidden",
+      webPreferences: {
+        preload: path.join(__dirname, "../preload/index.js"),
+        nodeIntegration: false,
+        contextIsolation: true,
+        sandbox: true
+        // Explicitly enable sandbox mode
+      }
+    });
+    try {
+      const url2 = resolveHtmlPath("index.html");
+      log$1.info(`初期HTML URL: ${url2}`);
+      log$1.info(`アプリパス: ${require$$0.app.getAppPath()}`);
+      log$1.info(`isPackaged: ${require$$0.app.isPackaged}`);
+      log$1.info("可能なパスを確認中...");
+      const possiblePaths = [];
+      const possibleUrls = [];
+      if (require$$0.app.isPackaged) {
+        const exePath = process.execPath;
+        log$1.info(`実行パス: ${exePath}`);
+        log$1.info(`リソースパス: ${process.resourcesPath}`);
+        possiblePaths.push(path.join(require$$0.app.getAppPath(), "out/renderer", "index.html"));
+        possiblePaths.push(path.join(path.dirname(require$$0.app.getAppPath()), "renderer", "index.html"));
+        possiblePaths.push(path.join(process.resourcesPath, "renderer", "index.html"));
+        possiblePaths.push(path.join(path.dirname(process.resourcesPath), "renderer", "index.html"));
+        possiblePaths.push(path.join(require$$0.app.getAppPath() + ".unpacked", "out/renderer", "index.html"));
+        possiblePaths.push(path.join(path.dirname(path.dirname(process.resourcesPath)), "renderer", "index.html"));
+        const appDir = path.dirname(path.dirname(path.dirname(process.resourcesPath)));
+        possiblePaths.push(path.join(appDir, "renderer", "index.html"));
+        possiblePaths.push(path.join(process.resourcesPath, "app", "out", "renderer", "index.html"));
+      } else {
+        possiblePaths.push(path.join(__dirname, "../../out/renderer", "index.html"));
+        possiblePaths.push(path.join(process.cwd(), "out/renderer", "index.html"));
+      }
+      possiblePaths.forEach((p) => {
+        possibleUrls.push(`file://${p}`);
+      });
+      let foundValidPath = false;
+      for (let i = 0; i < possiblePaths.length; i++) {
+        const p = possiblePaths[i];
+        const u = possibleUrls[i];
+        try {
+          const exists = fs.existsSync(p);
+          log$1.info(`パスパターン${i + 1}: ${p} - 存在: ${exists}`);
+          if (exists) {
+            log$1.info(`有効なパスを発見 #${i + 1}: ${p}`);
+            try {
+              await mainWindow.loadURL(u);
+              log$1.info(`HTML読み込み成功: ${u}`);
+              foundValidPath = true;
+              break;
+            } catch (loadError) {
+              const err = loadError;
+              log$1.warn(`パターン${i + 1}の読み込みに失敗: ${err.message}`);
+            }
+          }
+        } catch (error) {
+          const err = error;
+          log$1.warn(`パターン${i + 1}の確認中にエラー: ${err.message}`);
+        }
+      }
+      if (!foundValidPath) {
+        try {
+          log$1.info(`標準パスで読み込み試行: ${url2}`);
+          await mainWindow.loadURL(url2);
+          log$1.info("標準パスでHTML読み込み成功");
+        } catch (urlError) {
+          throw urlError;
+        }
+      }
+    } catch (error) {
+      log$1.error("HTMLロード中にエラーが発生しました:", error);
+      const fallbackPaths = [];
+      if (require$$0.app.isPackaged) {
+        if (process.platform === "darwin") {
+          fallbackPaths.push(path.join(process.resourcesPath, "renderer", "index.html"));
+          fallbackPaths.push(path.join(process.resourcesPath, "app", "renderer", "index.html"));
+          fallbackPaths.push(path.join(process.resourcesPath, "app", "out", "renderer", "index.html"));
+          fallbackPaths.push(path.join(path.dirname(process.resourcesPath), "renderer", "index.html"));
+          const unpackedPath = path.join(process.resourcesPath, "app.asar.unpacked");
+          fallbackPaths.push(path.join(unpackedPath, "out", "renderer", "index.html"));
+          fallbackPaths.push(path.join(unpackedPath, "renderer", "index.html"));
+        } else {
+          fallbackPaths.push(path.join(process.resourcesPath, "app.asar.unpacked", "renderer", "index.html"));
+          fallbackPaths.push(path.join(path.dirname(process.execPath), "renderer", "index.html"));
+        }
+      }
+      let fallbackSuccess = false;
+      for (let i = 0; i < fallbackPaths.length; i++) {
+        const fbPath = fallbackPaths[i];
+        const fbUrl = `file://${fbPath}`;
+        try {
+          const exists = fs.existsSync(fbPath);
+          log$1.info(`フォールバック#${i + 1}: ${fbPath} - 存在: ${exists}`);
+          if (exists) {
+            try {
+              await mainWindow.loadURL(fbUrl);
+              log$1.info(`フォールバック#${i + 1}で成功: ${fbUrl}`);
+              fallbackSuccess = true;
+              break;
+            } catch (fbError) {
+              const err = fbError;
+              log$1.warn(`フォールバック#${i + 1}の読み込みに失敗: ${err.message}`);
+            }
+          }
+        } catch (error2) {
+          const err = error2;
+          log$1.warn(`フォールバック#${i + 1}の確認中にエラー: ${err.message}`);
+        }
+      }
+      if (!fallbackSuccess) {
+        log$1.error("すべてのパスの試行に失敗しました");
+        const errorMessage = `
+          <html>
+            <head>
+              <title>エラー</title>
+              <style>
+                body { font-family: sans-serif; padding: 2rem; background-color: #f5f5f5; color: #333; }
+                h1 { color: #e63946; }
+                pre { background-color: #eee; padding: 1rem; overflow: auto; }
+              </style>
+            </head>
+            <body>
+              <h1>アプリケーションの読み込みに失敗しました</h1>
+              <p>以下のエラーが発生しました:</p>
+              <pre>${String(error)}</pre>
+              <p>ログファイル: ${log$1.transports.file.getFile().path}</p>
+            </body>
+          </html>
+        `;
+        mainWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(errorMessage)}`);
+      }
+    }
+    mainWindow.on("ready-to-show", () => {
+      if (!mainWindow) {
+        log$1.error('"mainWindow" is not defined');
+        return;
+      }
+      if (process.env.START_MINIMIZED) {
+        mainWindow.minimize();
+      } else {
+        mainWindow.maximize();
+        mainWindow.show();
+      }
+    });
+    mainWindow.on("closed", () => {
+      mainWindow = null;
+    });
+    try {
+      const menuBuilder = new MenuBuilder(mainWindow);
+      menuBuilder.buildMenu();
+    } catch (error) {
+      log$1.error("メニュー構築中にエラーが発生しました:", error);
+    }
+    mainWindow.webContents.setWindowOpenHandler((edata) => {
+      require$$0.shell.openExternal(edata.url);
+      return { action: "deny" };
+    });
+    try {
+      new AppUpdater();
+    } catch (error) {
+      log$1.error("自動更新の初期化中にエラーが発生しました:", error);
+    }
+    if (isDebug || process.env.DEBUG_PROD === "true") {
+      log$1.info("デバッグモードが有効：DevToolsを開きます");
+      mainWindow.webContents.openDevTools();
+    }
+  } catch (error) {
+    log$1.error("createWindow関数でエラーが発生しました:", error);
+    throw error;
   }
-  const RESOURCES_PATH = require$$0.app.isPackaged ? path.join(process.resourcesPath, "assets") : path.join(__dirname, "../../assets");
-  const getAssetPath = (...paths) => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
-  mainWindow = new require$$0.BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728,
-    icon: getAssetPath("icon.png"),
-    // FYI: https://www.electronjs.org/ja/docs/latest/api/frameless-window
-    titleBarStyle: "hidden",
-    webPreferences: {
-      preload: path.join(__dirname, "../preload/index.js"),
-      nodeIntegration: false,
-      contextIsolation: true,
-      sandbox: true
-      // Explicitly enable sandbox mode
-    }
-  });
-  mainWindow.loadURL(resolveHtmlPath("index.html"));
-  mainWindow.on("ready-to-show", () => {
-    if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined');
-    }
-    if (process.env.START_MINIMIZED) {
-      mainWindow.minimize();
-    } else {
-      mainWindow.maximize();
-      mainWindow.show();
-    }
-  });
-  mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
-  mainWindow.webContents.setWindowOpenHandler((edata) => {
-    require$$0.shell.openExternal(edata.url);
-    return { action: "deny" };
-  });
-  new AppUpdater();
 };
 require$$0.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -643,6 +838,33 @@ require$$0.app.whenReady().then(() => {
     if (mainWindow === null) createWindow();
   });
 }).catch(console.log);
+const log = electronLog;
+log.info("アプリケーション初期化: " + (/* @__PURE__ */ new Date()).toLocaleString());
+const isDebugProd = process.env.DEBUG_PROD === "true";
+if (isDebugProd) {
+  log.info("本番環境デバッグモードが有効です");
+  log.info("アプリバージョン:", require$$0.app.getVersion());
+  log.info("Electronバージョン:", process.versions.electron);
+  log.info("Chromeバージョン:", process.versions.chrome);
+  log.info("Nodeバージョン:", process.versions.node);
+  log.info("プラットフォーム:", process.platform);
+  log.info("アーキテクチャ:", process.arch);
+  log.info("実行パス:", require$$0.app.getAppPath());
+  log.info("ユーザーデータパス:", require$$0.app.getPath("userData"));
+  log.info("一時ファイルパス:", require$$0.app.getPath("temp"));
+  import("electron-debug").then((module2) => {
+    module2.default({ showDevTools: true, devToolsMode: "right" });
+    log.info("electron-debugを本番環境で有効化しました");
+  }).catch((err) => {
+    log.error("electron-debugのロードに失敗しました:", err);
+  });
+}
 if (electronSquirrelStartup) {
   require$$0.app.quit();
 }
+process.on("uncaughtException", (error) => {
+  log.error("未処理の例外が発生しました:", error);
+});
+process.on("unhandledRejection", (reason) => {
+  log.error("未処理のPromise rejectionが発生しました:", reason);
+});
